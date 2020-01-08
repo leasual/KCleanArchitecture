@@ -4,6 +4,7 @@ import android.widget.Toast
 import com.geekdroid.kcleanarchitecture.R
 import com.geekdroid.kcleanarchitecture.core.base.*
 import com.geekdroid.kcleanarchitecture.core.extension.subscribe
+import com.geekdroid.kcleanarchitecture.core.util.ValidationError
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -30,6 +31,10 @@ class MainActivity : BaseActivity<MainViewModel.MainUiModel>() {
         viewState.apply {
             uiModel.data?.let { Toast.makeText(this@MainActivity, if(it.articleInfoList.isNullOrEmpty()) "no uiModel" else it.articleInfoList!![0].desc,Toast.LENGTH_SHORT).show() }
         }
+    }
+
+    override fun handleValidError(error: ValidationError) {
+
     }
 
 }
