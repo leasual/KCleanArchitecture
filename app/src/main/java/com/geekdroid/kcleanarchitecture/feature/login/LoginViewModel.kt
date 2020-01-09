@@ -2,6 +2,8 @@ package com.geekdroid.kcleanarchitecture.feature.login
 
 import android.util.Log
 import com.geekdroid.kcleanarchitecture.core.base.BaseViewModel
+import com.geekdroid.kcleanarchitecture.core.util.Connectivity
+import com.geekdroid.kcleanarchitecture.core.util.CoroutinesContextProvider
 import com.geekdroid.kcleanarchitecture.core.util.phonePasswordValid
 import com.geekdroid.kcleanarchitecture.domain.login.LoginRequest
 import com.geekdroid.kcleanarchitecture.domain.login.LoginUseCase
@@ -12,8 +14,8 @@ import com.geekdroid.kcleanarchitecture.domain.login.UserInfo
  * Description: 用户登录
  */
 
-class LoginViewModel(private val loginUseCase: LoginUseCase) :
-    BaseViewModel<LoginViewModel.LoginUiModel>() {
+class LoginViewModel(private val coroutinesContext: CoroutinesContextProvider, private val connectivity: Connectivity, val loginUseCase: LoginUseCase) :
+    BaseViewModel<LoginViewModel.LoginUiModel>(coroutinesContext, connectivity) {
 
     fun login(account: String, password: String) {
 
@@ -22,7 +24,7 @@ class LoginViewModel(private val loginUseCase: LoginUseCase) :
                 loginUseCase(LoginRequest(account, password)).fold(::handleError) {
                     handleSuccess(LoginUiModel(it)) {
                         //处理成功后的业务逻辑
-                        Log.d("test", "login success")
+                        //Log.d("test", "login success")
                     }
                 }
             }

@@ -2,6 +2,8 @@ package com.geekdroid.kcleanarchitecture.data.login
 
 import com.geekdroid.kcleanarchitecture.core.base.BaseRepository
 import com.geekdroid.kcleanarchitecture.core.model.Failure
+import com.geekdroid.kcleanarchitecture.core.util.Connectivity
+import com.geekdroid.kcleanarchitecture.core.util.CoroutinesContextProvider
 import com.geekdroid.kcleanarchitecture.core.util.Either
 import com.geekdroid.kcleanarchitecture.data.api.KCleanService
 import com.geekdroid.kcleanarchitecture.data.database.model.UserEntity
@@ -15,13 +17,14 @@ import com.geekdroid.kcleanarchitecture.domain.login.UserInfo
  * Description: 从数据库读取数据转换为UI层数据
  */
 
-class LoginRepositoryImpl(private val apiService: KCleanService) :
-    BaseRepository<UserInfo, UserEntity>(), LoginRepository {
+class LoginRepositoryImpl(private val coroutinesContext: CoroutinesContextProvider, private val connectivity: Connectivity,
+                          private val apiService: KCleanService) :
+    BaseRepository<UserInfo, UserEntity>(coroutinesContext, connectivity), LoginRepository {
 
 
     override suspend fun login(request: LoginRequest): Either<Failure, UserInfo> {
        /* return fetchData {
-            apiService.login(request).getUiModel()
+            apiService.login(request).getData()
         }*/
         return fetchData(
             apiDataProvider = {

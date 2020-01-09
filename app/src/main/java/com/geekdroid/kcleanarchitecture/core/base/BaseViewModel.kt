@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geekdroid.kcleanarchitecture.core.model.Failure
-import com.geekdroid.kcleanarchitecture.core.util.Connectivity
-import com.geekdroid.kcleanarchitecture.core.util.CoroutinesContextProvider
-import com.geekdroid.kcleanarchitecture.core.util.Either
-import com.geekdroid.kcleanarchitecture.core.util.ValidationError
+import com.geekdroid.kcleanarchitecture.core.util.*
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -18,13 +15,14 @@ import org.koin.core.inject
  * Description: BaseViewModel
  */
 
-abstract class BaseViewModel<T : Any> : ViewModel(), KoinComponent {
+abstract class BaseViewModel<T : Any>(private val coroutinesContext: CoroutinesContextProvider, private val connectivity: Connectivity)
+    : ViewModel(), KoinComponent {
 
-    protected val coroutinesContext: CoroutinesContextProvider by inject()
-    private val connectivity: Connectivity by inject()
+//    protected val coroutinesContext: CoroutinesContextProvider by inject()
+//    private val connectivity: Connectivity by inject()
 
     /**
-     * 处理页面数据,无网络，等待，出错等
+     * 处理页面数据,无网络，出错等
      * 界面数据可以通过 uiModel class封装，例如
      * uiModel class LoginUiModel(
      *  val showLoading: Boolean,
@@ -34,6 +32,10 @@ abstract class BaseViewModel<T : Any> : ViewModel(), KoinComponent {
     protected var _viewState: MutableLiveData<ViewState<T>> = MutableLiveData()
     val viewState: MutableLiveData<ViewState<T>>
         get() = _viewState
+
+    protected var _loadingState: MutableLiveData<LoadingState<T>> = MutableLiveData()
+    val loadingState: MutableLiveData<LoadingState<T>>
+        get() = _loadingState
 
     /**
      * 针对于需要使用网络的业务逻辑
@@ -47,13 +49,13 @@ abstract class BaseViewModel<T : Any> : ViewModel(), KoinComponent {
         noInternetAction: () -> Unit
     ) {
         when {
-            connectivity.hasNetworkAccess() -> viewModelScope.launch {
-                if (isShowLoading) _viewState.value = LoadingState(true)
+            connectivity.hasNetworkAccess() -> viewModelScope.launch(coroutinesContext.main) {
+                if (isShowLoading) _loadingState.value = LoadingState(true)
                 action()
-                if (isShowLoading) _viewState.value = LoadingState(false)
+                if (isShowLoading) _loadingState.value = LoadingState(false)
             }
             else -> {
-                if (isShowLoading) _viewState.value = LoadingState(false)
+                if (isShowLoading) _loadingState.value = LoadingState(false)
                 noInternetAction()
             }
         }
@@ -64,10 +66,10 @@ abstract class BaseViewModel<T : Any> : ViewModel(), KoinComponent {
      * @param action 具体的业务逻辑
      */
     protected fun executeUseCase(isShowLoading: Boolean = false, action: suspend () -> Unit) {
-        if (isShowLoading) _viewState.value = LoadingState(true)
-        viewModelScope.launch {
+        if (isShowLoading) _loadingState.value = LoadingState(true)
+        viewModelScope.launch(coroutinesContext.main) {
             action()
-            if (isShowLoading) _viewState.value = LoadingState(false)
+            if (isShowLoading) _loadingState.value = LoadingState(false)
         }
     }
 
@@ -120,7 +122,7 @@ abstract class BaseViewModel<T : Any> : ViewModel(), KoinComponent {
 
     override fun onCleared() {
         super.onCleared()
-        Log.d("test", "viewModel onCleared")
+        //Log.d("test", "viewModel onCleared")
     }
 
 }

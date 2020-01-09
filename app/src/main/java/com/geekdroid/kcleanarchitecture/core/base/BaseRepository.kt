@@ -1,6 +1,5 @@
 package com.geekdroid.kcleanarchitecture.core.base
 
-import android.util.Log
 import com.geekdroid.kcleanarchitecture.core.model.Failure
 import com.geekdroid.kcleanarchitecture.core.util.Connectivity
 import com.geekdroid.kcleanarchitecture.core.util.CoroutinesContextProvider
@@ -19,9 +18,10 @@ import org.koin.core.inject
  * @param U Domain层的数据(UI需要的数据)
  * @param D Database层的数据
  */
-abstract class BaseRepository<U : Any, in D : DomainMapper<U>> : KoinComponent {
-    private val connectivity: Connectivity by inject()
-    private val contextProvider: CoroutinesContextProvider by inject()
+abstract class BaseRepository<U : Any, in D : DomainMapper<U>>(private val contextProvider: CoroutinesContextProvider,
+                                                               private val connectivity: Connectivity) : KoinComponent {
+//    private val connectivity: Connectivity by inject()
+//    private val contextProvider: CoroutinesContextProvider by inject()
 
 
     /**
@@ -42,11 +42,11 @@ abstract class BaseRepository<U : Any, in D : DomainMapper<U>> : KoinComponent {
                 val dataResult = dbDataProvider()
                 when {
                     dataResult != null -> {
-                        Log.d("test", "fetchFromDBSuccess")
+                        //Log.d("test", "fetchFromDBSuccess")
                         Either.Right(dataResult.mapToDomainModel())
                     }
                     else -> {
-                        Log.d("test", "fetchFromDBError")
+                        //Log.d("test", "fetchFromDBError")
                         Either.Left(Failure.DatabaseError())
                     }
                 }

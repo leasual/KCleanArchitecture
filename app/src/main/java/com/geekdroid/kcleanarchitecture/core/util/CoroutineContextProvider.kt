@@ -14,6 +14,9 @@ open class CoroutinesContextProvider {
     open val default: CoroutineContext by lazy { Dispatchers.Default }
 }
 
+/**
+ * 用于单元测试
+ */
 class TestCoroutinesContextProvider : CoroutinesContextProvider() {
     override val main: CoroutineContext = Dispatchers.Unconfined
     override val io: CoroutineContext = Dispatchers.Unconfined

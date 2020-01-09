@@ -4,6 +4,7 @@ import com.geekdroid.kcleanarchitecture.BuildConfig
 import com.geekdroid.kcleanarchitecture.core.util.Connectivity
 import com.geekdroid.kcleanarchitecture.core.util.ConnectivityImpl
 import com.geekdroid.kcleanarchitecture.core.util.CoroutinesContextProvider
+import com.geekdroid.kcleanarchitecture.core.util.TestCoroutinesContextProvider
 import com.geekdroid.kcleanarchitecture.data.api.KCleanService
 import com.geekdroid.kcleanarchitecture.data.login.LoginRepositoryImpl
 import com.geekdroid.kcleanarchitecture.data.main.MainRepositoryImpl
@@ -64,8 +65,8 @@ val commonModule = module {
  */
 val loginModule = module {
     factory<LoginUseCase> { LoginUseCaseImpl(get()) }
-    factory<LoginRepository> { LoginRepositoryImpl(get()) }
-    viewModel { LoginViewModel(get()) }
+    factory<LoginRepository> { LoginRepositoryImpl(get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get()) }
 }
 
 /**
@@ -73,8 +74,8 @@ val loginModule = module {
  */
 val mainModule = module {
     factory<MainUseCase> { MainUseCaseImpl(get()) }
-    factory<MainRepository> { MainRepositoryImpl(get()) }
-    viewModel { MainViewModel(get()) }
+    factory<MainRepository> { MainRepositoryImpl(get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
 }
 
 /**

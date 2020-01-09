@@ -13,18 +13,19 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * Description:
  */
 
-class MainActivity : BaseActivity<MainViewModel.MainUiModel>() {
+class MainActivity : BaseActivity<MainViewModel, MainViewModel.MainUiModel>() {
 
-    private val viewModel: MainViewModel by viewModel()
+//    private val viewModel: MainViewModel by viewModel()
 
     override fun getLayoutId(): Int = R.layout.activity_main
 
     override fun setupViews() {
+        setupLoadingProgressBar(pbLoading)
         viewModel.getToday()
     }
 
     override fun observeData() {
-        viewModel.viewState.subscribe(this) { handleViewState(it, pbLoading, clContainer) }
+        viewModel.viewState.subscribe(this) { handleViewState(it, clContainer) }
     }
 
     override fun handleSuccess(viewState: SuccessState<MainViewModel.MainUiModel>) {

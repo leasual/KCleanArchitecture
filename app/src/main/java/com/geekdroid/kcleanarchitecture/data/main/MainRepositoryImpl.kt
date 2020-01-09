@@ -2,6 +2,8 @@ package com.geekdroid.kcleanarchitecture.data.main
 
 import com.geekdroid.kcleanarchitecture.core.base.BaseRepository
 import com.geekdroid.kcleanarchitecture.core.model.Failure
+import com.geekdroid.kcleanarchitecture.core.util.Connectivity
+import com.geekdroid.kcleanarchitecture.core.util.CoroutinesContextProvider
 import com.geekdroid.kcleanarchitecture.core.util.Either
 import com.geekdroid.kcleanarchitecture.data.api.KCleanService
 import com.geekdroid.kcleanarchitecture.data.database.model.MainEntity
@@ -14,8 +16,9 @@ import com.geekdroid.kcleanarchitecture.domain.main.MainRepository
  * Description: 从数据库读取数据转换为UI层数据
  */
 
-class MainRepositoryImpl(private val apiService: KCleanService) :
-    BaseRepository<MainInfo, MainEntity>(),
+class MainRepositoryImpl(private val coroutinesContext: CoroutinesContextProvider, private val connectivity: Connectivity,
+                         private val apiService: KCleanService) :
+    BaseRepository<MainInfo, MainEntity>(coroutinesContext, connectivity),
     MainRepository {
 
 
@@ -25,7 +28,7 @@ class MainRepositoryImpl(private val apiService: KCleanService) :
         }
        /* return fetchData(
             apiDataProvider = {
-                apiService.getToday().getUiModel(
+                apiService.getToday().getData(
                     cacheAction = {
                         //写入数据库
                         Log.d("test", "uiModel= $it")
