@@ -1,9 +1,6 @@
-package com.geekdroid.kcleanarchitecture.login
+package com.geekdroid.kcleanarchitecture.feature.login
 
-import com.geekdroid.kcleanarchitecture.core.base.NoNetworkState
-import com.geekdroid.kcleanarchitecture.core.base.ServerErrorState
-import com.geekdroid.kcleanarchitecture.core.base.SuccessState
-import com.geekdroid.kcleanarchitecture.core.base.ValidationState
+import com.geekdroid.kcleanarchitecture.core.base.*
 import com.geekdroid.kcleanarchitecture.core.model.Failure
 import com.geekdroid.kcleanarchitecture.core.util.Either
 import com.geekdroid.kcleanarchitecture.core.util.ValidationError
@@ -25,7 +22,7 @@ import org.junit.Test
 
 /**
  * Create by james.li on 2020/1/8
- * Description: BaseTest
+ * Description: LoginViewModelTest
  */
 
 class LoginViewModelTest: BaseKoinTest()  {
@@ -55,6 +52,30 @@ class LoginViewModelTest: BaseKoinTest()  {
         loginViewModel.login(phone, password)
         assertEquals(false, loginViewModel.loadingState.value?.isLoading)
         assertEquals(true, loginViewModel.viewState.value is NoNetworkState)
+    }
+
+    @Test
+    fun `login fail network error`() = runBlocking {
+        whenever(loginUseCase(LoginRequest(phone, password))).thenReturn(Either.Left(Failure.NetworkError()))
+        loginViewModel.login(phone, password)
+        assertEquals(false, loginViewModel.loadingState.value?.isLoading)
+        assertEquals(true, loginViewModel.viewState.value is NetworkErrorState)
+    }
+
+    @Test
+    fun `login fail data error`() = runBlocking {
+        whenever(loginUseCase(LoginRequest(phone, password))).thenReturn(Either.Left(Failure.DatabaseError()))
+        loginViewModel.login(phone, password)
+        assertEquals(false, loginViewModel.loadingState.value?.isLoading)
+        assertEquals(true, loginViewModel.viewState.value is DataErrorState)
+    }
+
+    @Test
+    fun `login fail unknown error`() = runBlocking {
+        whenever(loginUseCase(LoginRequest(phone, password))).thenReturn(Either.Left(Failure.UnKnownError()))
+        loginViewModel.login(phone, password)
+        assertEquals(false, loginViewModel.loadingState.value?.isLoading)
+        assertEquals(true, loginViewModel.viewState.value is UnknownErrorState)
     }
 
     @Test

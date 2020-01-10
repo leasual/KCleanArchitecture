@@ -29,7 +29,7 @@ abstract class BaseRepository<U : Any, in D : DomainMapper<U>>(private val conte
      * @param apiDataProvider 接口操作抽象
      * @param dbDataProvider 数据库操作抽象
      */
-    protected suspend fun fetchData(
+    public suspend fun fetchData(
         apiDataProvider: suspend () -> Either<Failure, U>,
         dbDataProvider: suspend () -> D?
     ): Either<Failure, U> {

@@ -120,9 +120,4 @@ abstract class BaseViewModel<T : Any>(private val coroutinesContext: CoroutinesC
         _viewState.value = SuccessState(data)
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        //Log.d("test", "viewModel onCleared")
-    }
-
 }

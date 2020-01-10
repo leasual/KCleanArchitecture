@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
  * Description:
  */
 
-class MainViewModel(private val coroutinesContext: CoroutinesContextProvider, private val connectivity: Connectivity,
+class MainViewModel(private val coroutinesContext: CoroutinesContextProvider, connectivity: Connectivity,
                     private val mainUseCase: MainUseCase) :
     BaseViewModel<MainViewModel.MainUiModel>(coroutinesContext, connectivity) {
 

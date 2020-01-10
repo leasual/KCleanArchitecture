@@ -42,7 +42,7 @@ abstract class BaseKoinTest : KoinTest {
 
     @Before
     fun before() {
-        MockitoAnnotations.initMocks(this)
+        //MockitoAnnotations.initMocks(this)
         startKoin {
             androidContext(context)
             modules(appModule)

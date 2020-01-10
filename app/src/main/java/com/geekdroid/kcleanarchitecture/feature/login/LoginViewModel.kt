@@ -1,6 +1,5 @@
 package com.geekdroid.kcleanarchitecture.feature.login
 
-import android.util.Log
 import com.geekdroid.kcleanarchitecture.core.base.BaseViewModel
 import com.geekdroid.kcleanarchitecture.core.util.Connectivity
 import com.geekdroid.kcleanarchitecture.core.util.CoroutinesContextProvider
@@ -14,7 +13,7 @@ import com.geekdroid.kcleanarchitecture.domain.login.UserInfo
  * Description: 用户登录
  */
 
-class LoginViewModel(private val coroutinesContext: CoroutinesContextProvider, private val connectivity: Connectivity, val loginUseCase: LoginUseCase) :
+class LoginViewModel(coroutinesContext: CoroutinesContextProvider, connectivity: Connectivity, val loginUseCase: LoginUseCase) :
     BaseViewModel<LoginViewModel.LoginUiModel>(coroutinesContext, connectivity) {
 
     fun login(account: String, password: String) {
