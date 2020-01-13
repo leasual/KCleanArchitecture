@@ -1,5 +1,6 @@
 package com.geekdroid.kcleanarchitecture.feature.login
 
+import android.util.Log
 import com.geekdroid.kcleanarchitecture.core.base.BaseViewModel
 import com.geekdroid.kcleanarchitecture.core.util.Connectivity
 import com.geekdroid.kcleanarchitecture.core.util.CoroutinesContextProvider
@@ -23,7 +24,7 @@ class LoginViewModel(coroutinesContext: CoroutinesContextProvider, connectivity:
                 loginUseCase(LoginRequest(account, password)).fold(::handleError) {
                     handleSuccess(LoginUiModel(it)) {
                         //处理成功后的业务逻辑
-                        //Log.d("test", "login success")
+                        Log.d("test", "login success")
                     }
                 }
             }
