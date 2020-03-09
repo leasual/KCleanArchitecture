@@ -19,7 +19,7 @@ import com.geekdroid.kcleanarchitecture.domain.login.UserInfo
 
 class LoginRepositoryImpl(private val coroutinesContext: CoroutinesContextProvider, private val connectivity: Connectivity,
                           private val apiService: KCleanService) :
-    BaseRepository<UserInfo, UserEntity>(coroutinesContext, connectivity), LoginRepository {
+    BaseRepository(coroutinesContext, connectivity), LoginRepository {
 
 
     override suspend fun login(request: LoginRequest): Either<Failure, UserInfo> {

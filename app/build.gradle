@@ -28,6 +28,31 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+
+    flavorDimensions "company", "server"
+    productFlavors {
+        nahi{
+            dimension "company"
+        }
+        megaman {
+            dimension "company"
+        }
+        ndtek {
+            dimension "company"
+        }
+        wesoft{
+            dimension "company"
+        }
+        dev {
+            dimension "server"
+        }
+        qa {
+            dimension "server"
+        }
+        prod {
+            dimension "server"
+        }
+    }
 }
 
 
@@ -75,4 +100,15 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3Version"
     //implementation "com.squareup.okhttp3:okhttp:$okhttp3Version"
+
+    //objectbox
+    debugApi "io.objectbox:objectbox-android-objectbrowser:$objectboxVersion"
+    releaseApi "io.objectbox:objectbox-android:$objectboxVersion"
+
+    //rxjava
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
 }
+
+
+apply plugin: 'io.objectbox'

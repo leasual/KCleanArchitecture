@@ -18,7 +18,7 @@ import org.koin.core.inject
  * @param U Domain层的数据(UI需要的数据)
  * @param D Database层的数据
  */
-abstract class BaseRepository<U : Any, in D : DomainMapper<U>>(private val contextProvider: CoroutinesContextProvider,
+abstract class BaseRepository/*<U : Any, in D : DomainMapper<U>>*/(private val contextProvider: CoroutinesContextProvider,
                                                                private val connectivity: Connectivity) : KoinComponent {
 //    private val connectivity: Connectivity by inject()
 //    private val contextProvider: CoroutinesContextProvider by inject()
@@ -29,7 +29,7 @@ abstract class BaseRepository<U : Any, in D : DomainMapper<U>>(private val conte
      * @param apiDataProvider 接口操作抽象
      * @param dbDataProvider 数据库操作抽象
      */
-    public suspend fun fetchData(
+    public suspend fun <D: DomainMapper<U>, U: Any> fetchData(
         apiDataProvider: suspend () -> Either<Failure, U>,
         dbDataProvider: suspend () -> D?
     ): Either<Failure, U> {
@@ -58,7 +58,7 @@ abstract class BaseRepository<U : Any, in D : DomainMapper<U>>(private val conte
      * 直接从服务器中获取数据，并转换，不带缓存机制
      * @param apiDataProvider 接口操作抽象
      */
-    protected suspend fun fetchData(apiDataProvider: suspend () -> Either<Failure, U>): Either<Failure, U> {
+    protected suspend fun <U: Any> fetchData(apiDataProvider: suspend () -> Either<Failure, U>): Either<Failure, U> {
         return when {
             connectivity.hasNetworkAccess() -> withContext(contextProvider.io) {
                 apiDataProvider()

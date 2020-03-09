@@ -18,7 +18,7 @@ import com.geekdroid.kcleanarchitecture.domain.main.MainRepository
 
 class MainRepositoryImpl(private val coroutinesContext: CoroutinesContextProvider, private val connectivity: Connectivity,
                          private val apiService: KCleanService) :
-    BaseRepository<MainInfo, MainEntity>(coroutinesContext, connectivity),
+    BaseRepository(coroutinesContext, connectivity),
     MainRepository {
 
 
